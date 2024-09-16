@@ -7,10 +7,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class DatabaseServlet extends HttpServlet {
@@ -19,6 +18,26 @@ public class DatabaseServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    String sql = "select id, name from customer";
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/app", "appuser", "pirate");
+            conn.setAutoCommit(false);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet result = pstmt.executeQuery();
+            List<Customer> customerList = new ArrayList<>();
+
+            while (result.next()) {
+                customerList.add(
+                        new Customer(
+                                result.getInt("id"),
+                                result.getString("name")));
+            }
+            resp.setContentType("application/json");
+            resp.getWriter().write(objectMapper.writeValueAsString(customerList));
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -37,5 +56,10 @@ public class DatabaseServlet extends HttpServlet {
             System.out.println(e.getLocalizedMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
     }
 }
