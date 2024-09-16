@@ -14,6 +14,7 @@ public class CustomerServer {
         Resource resource = Resource.newClassPathResource("/webapp");
         var webApp = new WebAppContext(resource, "/");
         webApp.addServlet(new ServletHolder(new CustomerServlet()), "/api/customer");
+        webApp.addServlet(new ServletHolder(new DatabaseServlet()), "/api/database");
 
         server.setHandler(webApp);
         server.start();
