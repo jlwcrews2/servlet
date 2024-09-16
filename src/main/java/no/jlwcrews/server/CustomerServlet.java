@@ -24,16 +24,4 @@ public class CustomerServlet extends HttpServlet {
         System.out.println(cust);
         resp.getWriter().write(String.valueOf(cust));
     }
-
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPut(req, resp);
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doDelete(req, resp);
-    }
-
-
 }
