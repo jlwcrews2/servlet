@@ -18,7 +18,6 @@ public class CustomerServer {
         var webApp = new WebAppContext(resource, "/");
         webApp.addServlet(new ServletHolder(new CustomerServlet()), "/api/customer");
         webApp.addServlet(new ServletHolder(new DatabaseServlet()), "/api/database");
-        webApp.addFilter(new FilterHolder(new SecurityFilter()), "/*", DispatcherType.REQUEST);
         server.setHandler(webApp);
         server.start();
     }
