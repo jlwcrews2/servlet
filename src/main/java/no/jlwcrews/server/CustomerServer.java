@@ -9,6 +9,8 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+import java.util.EnumSet;
+
 public class CustomerServer {
 
     Server server = new Server(8181);
@@ -18,7 +20,7 @@ public class CustomerServer {
         var webApp = new WebAppContext(resource, "/");
         webApp.addServlet(new ServletHolder(new CustomerServlet()), "/api/customer");
         webApp.addServlet(new ServletHolder(new DatabaseServlet()), "/api/database");
-        webApp.addFilter(new FilterHolder(new SecurityFilter()), "/*", DispatcherType.REQUEST);
+        webApp.addFilter(new FilterHolder(new SecurityFilter()), "/*", EnumSet.of(DispatcherType.REQUEST));
         server.setHandler(webApp);
         server.start();
     }
